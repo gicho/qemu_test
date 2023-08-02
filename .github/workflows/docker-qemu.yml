@@ -1,0 +1,29 @@
+name: Docker QEMU workflow
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build Docker image
+        run: |
+          docker build -t my_image .
+
+      - name: Compile and run
+        run: |
+          docker run -v ${PWD}:/workdir my_image /bin/sh -c "arm-none-eabi-gcc -o hello_world test.cpp && qemu-arm hello_world"
+        id: compile
+
+      - name: Archive output
+        uses: actions/upload-artifact@v2
+        with:
+          name: output
+          path: ./output.txt
