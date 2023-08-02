@@ -19,7 +19,7 @@ jobs:
 
       - name: Compile and run
         run: |
-          docker run -v ${PWD}:/workdir my_image /bin/sh -c "arm-none-eabi-gcc -o hello_world test.cpp && qemu-arm hello_world"
+          docker run -v ${PWD}:/workdir my_image /bin/sh -c "arm-none-eabi-g++ -o hello_world test.cpp && qemu-arm hello_world"
         id: compile
 
       - name: Archive output
